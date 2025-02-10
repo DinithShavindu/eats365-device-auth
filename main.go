@@ -24,6 +24,9 @@ func main() {
 	r.HandleFunc("/merchant-list", handleMerchantList).Methods("POST")
 	r.HandleFunc("/register-device", handleRegisterDevice).Methods("POST")
 
+	// Health check endpoint
+	r.HandleFunc("/health", healthCheck).Methods("GET")
+
 	// Enable CORS
 	corsOptions := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -36,6 +39,13 @@ func main() {
 	// Start the server
 	fmt.Println("Server running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", handler))
+}
+
+// healthCheck handles the health check requests
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	// You can add more checks here if needed (e.g., database connection, external API health, etc.)
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintln(w, "OK")
 }
 
 // Merchant represents a simplified version of a merchant
